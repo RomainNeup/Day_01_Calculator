@@ -6,7 +6,8 @@ This project is part of a 30-day coding challenge, where we progressively build 
 
 On Day 1, we start with a basic calculator app. It allows users to perform basic arithmetic operations like addition, subtraction, multiplication, and division.
 
-![App Screenshot](./screenshot.png)
+![App Mockup dark](./mockup-dark.png)
+![App Mockup light](./mockup-light.png)
 
 ## Features
 Perform addition, subtraction, multiplication, and division.
