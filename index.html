@@ -1,6 +1,7 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="tailwind.config.js">
@@ -16,7 +17,7 @@
 </head>
 
 <body class="bg-light dark:bg-dark overflow-hidden text-md">
-    <div class="flex flex-col h-screen p-2">
+    <div class="flex flex-col h-screen p-4 space-y-4">
         <div class="w-full flex justify-between"
             x-data="{darkMode: localStorage.getItem('theme') === 'dark'} || false" x-init="$watch('darkMode', (val) => {
                 localStorage.setItem('theme', val ? 'dark': 'light');
