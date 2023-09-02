@@ -1,0 +1,177 @@
+<html>
+
+<head>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="tailwind.config.js">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+
+<body class="bg-light dark:bg-dark overflow-hidden">
+    <div class="absolute top-0 right-0" x-data="{darkMode: localStorage.getItem('theme') === 'dark'} || false" x-init="$watch('darkMode', (val) => {
+            localStorage.setItem('theme', val ? 'dark': 'light');
+            val ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');
+        })">
+        <button @click="console.log(darkMode); darkMode = !darkMode" class="p-8" :class="darkMode? 'text-light': 'text-dark'">
+            <span class="material-symbols-outlined" x-text="darkMode ? 'light_mode' : 'dark_mode'">
+                sun
+            </span>
+        </button>
+    </div>
+    <div class="flex justify-center h-screen p-8">
+        <div class="grid grid-cols-4 gap-4 max-w-md grow items-center" x-data="{
+            result: 0,
+            operator: '',
+            typed: 0,
+            float: false,
+            expressions: [''],
+            calculate(newOperator) {
+                this.expressions[this.expressions.length - 1] += `${newOperator} `;
+                switch(this.operator) {
+                    case '/':
+                        this.result = this.result / this.typed;
+                        break;
+                    case '+':
+                        this.result = this.result + this.typed;
+                        break;
+                    case '-':
+                        this.result = this.result - this.typed;
+                        break;
+                    case '*':
+                        this.result = this.result * this.typed;
+                        break;
+                    default:
+                        this.result = this.typed || this.result;
+                        break;
+                }
+                switch (newOperator) {
+                    case '.':
+                        this.float = true;
+                        break;
+                    case '%':
+                        this.typed = this.typed / 100;
+                        break;
+                    case '=':
+                        this.expressions[this.expressions.length - 1] += this.result;
+                        this.expressions.push('');
+                    default:
+                        this.typed = 0;
+                        this.operator = newOperator;
+                }
+            },
+            type(num) {
+                this.typed = this.typed * 10 + num;
+                if (this.float) {
+                    this.typed /= 10;
+                }
+                this.expressions[this.expressions.length - 1] += num;
+            },
+            reset() {
+                this.typed = 0;
+                this.result = 0;
+                this.operator = '';
+                this.expressions = [''];
+            }
+        }">
+            <div
+                class="col-span-4 text-right text-lg border border-primary h-24 rounded-full text-primary overflow-hidden p-4 flex flex-col items-end justify-end">
+                <template x-for="expression in expressions">
+                    <p x-text="expression">0</p>
+                </template>
+            </div>
+            <button
+                class="h-full col-span-2 bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="reset()" @keyup.c.window="reset()">
+                AC
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="calculate('%')" @keydown.%.window="calculate('%')">
+                %
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="calculate('/')" @keydown.slash.window="calculate('/')">
+                /
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(7)" @keydown.7.window="type(7)">
+                7
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(8)" @keydown.8.window="type(8)">
+                8
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(9)" @keydown.9.window="type(9)">
+                9
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="calculate('*')" @keydown.*.window="calculate('*')">
+                x
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(4)" @keydown.4.window="type(4)">
+                4
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(5)" @keydown.5.window="type(5)">
+                5
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(6)" @keydown.6.window="type(6)">
+                6
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="calculate('-')" @keydown.-.window="calculate('-')">
+                -
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(1)" @keydown.1.window="type(1)">
+                1
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(2)" @keydown.2.window="type(2)">
+                2
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(3)" @keydown.3.window="type(3)">
+                3
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="calculate('+')" @keydown.+.window="calculate('+')">
+                +
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="type(0)" @keydown.0.window="type(0)">
+                0
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center"
+                @click="calculate('.')" @keydown.period.window="calculate('.')">
+                ,
+            </button>
+            <button
+                class="h-full bg-primary text-light dark:text-dark dark:hover:text-primary hover:text-primary hover:bg-transparent border border-primary rounded-full p-4 text-center col-span-2"
+                @click="calculate('=')" @keydown.equal.window="calculate('=')" @keydown.enter.window="calculate('=')">
+                =
+            </button>
+        </div>
+    </div>
+</body>
+
+</html>
